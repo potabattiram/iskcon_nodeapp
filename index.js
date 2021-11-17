@@ -7,7 +7,8 @@ var cors = require('cors')
 
 
 app.use(cors({
-    origin:'http://localhost:3000'
+    origin:'https://iskcon-solapur.web.app',
+    methods:['GET','POST'],
 }))
 
 var s3 = new aws.S3({
