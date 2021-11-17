@@ -4,17 +4,16 @@ var multer = require("multer");
 var multerS3 = require("multer-s3");
 var app = express();
 var cors = require("cors");
+
 app.use(express.json());
 
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://iskcon-solapur.web.app');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
-});
-  
-var whitelist = ['https://iskcon-solapur.web.app']
+  });
+
+var whitelist = 'https://iskcon-solapur.web.app'
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
@@ -45,7 +44,7 @@ var upload = multer({
   }),
 });
 
-app.get("/getimagesurl",cors(corsOptions), (req, res) => {
+app.get("/getimagesurl", cors(corsOptions), (req, res) => {
   s3.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
     if (err) {
       console.log(err);
