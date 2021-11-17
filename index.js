@@ -33,14 +33,19 @@ var upload = multer({
 
 })
 
-app.post('/getImages',(req,res) => {
-    const date = req.body.date;
+app.get('/getimagesurl',(req,res) => {
     s3.listObjects({Bucket:"bhaktivedant-bucketv"},(err,data) => {
         if(err) {
             console.log(err)
         }
         else {
-            res.status(200).send(data)
+            const imageData = data.Contents.map((image) => {
+                return {
+                    key: image.Key,
+                    url: `https://bhaktivedant-bucketv.s3.amazonaws.com/${image.Key}`
+                }
+            })
+           res.send(imageData)
         }
     })
 })
@@ -48,12 +53,12 @@ app.post('/getImages',(req,res) => {
 
 
 //Uploading single File to aws s3 bucket
-app.post('/upload', upload.single('image'), function (req, res, next) {
-   res.send({
-       data: req.files,
-       msg: 'Successfully uploaded ' + req.files + ' files!'
-   })
-})
+// app.post('/upload', upload.single('file'), function (req, res, next) {
+//    res.send({
+//        data: req.files,
+//        msg: 'Successfully uploaded files!'
+//    })
+// })
 
 
 // //Uploading Multiple Files to aws s3 bucket
