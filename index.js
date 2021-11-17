@@ -57,7 +57,7 @@ app.get("/getimagesurl", (req, res) => {
   });
 });
 
-
-app.listen(5000, function () {
-  console.log("Server runs like Bolt");
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log("Server runs like Bolt on " + port);
 });
