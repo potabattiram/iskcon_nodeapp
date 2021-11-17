@@ -12,17 +12,10 @@ app.all("/*", function (req, res, next) {
   next();
 });
 
-var whitelist = "https://iskcon-solapur.web.app";
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-app.use(cors(corsOptions));
+app.use(cors({
+    origin:"*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+}));
 
 app.use(express.json());
 
