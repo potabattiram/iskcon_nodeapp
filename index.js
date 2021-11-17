@@ -5,7 +5,6 @@ var multerS3 = require("multer-s3");
 var app = express();
 var cors = require("cors");
 
-app.use(express.json());
 
 app.all("/*", function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -24,7 +23,9 @@ var corsOptions = {
   },
 };
 app.use(cors(corsOptions));
-// Then pass them to cors:
+
+app.use(express.json());
+
 var s3 = new aws.S3({
   accessKeyId: "AKIA6PX5RHJWPJZVF7FV",
   secretAccessKey: "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",
