@@ -4,21 +4,18 @@ var multer = require("multer");
 var multerS3 = require("multer-s3");
 var app = express();
 var cors = require("cors");
-var errorhandler = require("errorhandler")
+var errorhandler = require("errorhandler");
 
-var allowedOrigins = ['https://iskcon-solapur.web.app'];
-app.use(cors({  
-  origin: function(origin, callback){
-    if(!origin) 
-      return callback(null, true);    
-    if(allowedOrigins.indexOf(origin) === -1){
-      var msg = 'The CORS policy for this site does not ' +                
-          'allow access from the specified Origin.';      
-      return callback(new Error(msg), false);    
-    }    
-    return callback(null, true);  
-  }
-}));
+// var allowedOrigins = ['https://iskcon-solapur.web.app'];
+app.use(
+  cors({
+    allowedHeaders: ["authorization", "Content-Type"],
+    exposedHeaders: ["authorization"],
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+  })
+);
 
 app.use(express.json());
 
@@ -57,8 +54,7 @@ app.get("/getimagesurl", (req, res) => {
   });
 });
 
-app.use(errorhandler())
-
+app.use(errorhandler());
 
 //Uploading single File to aws s3 bucket
 // app.post('/upload', upload.single('file'), function (req, res, next) {
@@ -79,4 +75,3 @@ app.use(errorhandler())
 app.listen(5000, function () {
   console.log("Server runs like Bolt");
 });
-
