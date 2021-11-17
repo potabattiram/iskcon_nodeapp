@@ -4,6 +4,8 @@ var multer = require("multer");
 var multerS3 = require("multer-s3");
 var app = express();
 var cors = require("cors");
+app.use(express.json());
+
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'https://iskcon-solapur.web.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -24,15 +26,12 @@ var corsOptions = {
 }
 
 // Then pass them to cors:
-app.use(cors(corsOptions));
-
 var s3 = new aws.S3({
   accessKeyId: "AKIA6PX5RHJWPJZVF7FV",
   secretAccessKey: "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",
   Bucket: "bhaktivedant-bucketv",
 });
 
-app.use(express.json());
 var upload = multer({
   storage: multerS3({
     s3: s3,
@@ -46,7 +45,7 @@ var upload = multer({
   }),
 });
 
-app.get("/getimagesurl", (req, res) => {
+app.get("/getimagesurl",cors(corsOptions), (req, res) => {
   s3.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
     if (err) {
       console.log(err);
