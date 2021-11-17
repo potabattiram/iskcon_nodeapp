@@ -4,18 +4,18 @@ var multer = require("multer");
 var multerS3 = require("multer-s3");
 var app = express();
 var cors = require("cors");
-
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+  });
+  
 app.use(
   cors({
     origin: "https://iskcon-solapur.web.app",
     methods: ["GET", "POST"],
   })
 );
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://iskcon-solapur.web.app");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
 
 var s3 = new aws.S3({
   accessKeyId: "AKIA6PX5RHJWPJZVF7FV",
