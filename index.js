@@ -4,7 +4,6 @@ var multer = require("multer");
 var multerS3 = require("multer-s3");
 var app = express();
 var cors = require("cors");
-var errorhandler = require("errorhandler");
 
 // var allowedOrigins = ['https://iskcon-solapur.web.app'];
 app.use(
@@ -57,9 +56,6 @@ app.get("/getimagesurl", (req, res) => {
     }
   });
 });
-
-app.use(errorhandler());
-
 
 
 app.listen(5000, function () {
