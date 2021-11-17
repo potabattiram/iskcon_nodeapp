@@ -12,12 +12,19 @@ app.use(function (req, res, next) {
     next();
 });
   
-app.use(
-  cors({
-    origin: "https://iskcon-solapur.web.app",
-    methods: ["GET", "POST"],
-  })
-);
+var whitelist = ['https://iskcon-solapur.web.app']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+// Then pass them to cors:
+app.use(cors(corsOptions));
 
 var s3 = new aws.S3({
   accessKeyId: "AKIA6PX5RHJWPJZVF7FV",
