@@ -7,23 +7,23 @@ var cors = require("cors");
 
 app.use(express.json());
 
-app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-  });
+app.all("/*", function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
-var whitelist = 'https://iskcon-solapur.web.app'
+var whitelist = "https://iskcon-solapur.web.app";
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error("Not allowed by CORS"));
     }
-  }
-}
-
+  },
+};
+app.use(cors(corsOptions));
 // Then pass them to cors:
 var s3 = new aws.S3({
   accessKeyId: "AKIA6PX5RHJWPJZVF7FV",
@@ -44,7 +44,7 @@ var upload = multer({
   }),
 });
 
-app.get("/getimagesurl", cors(corsOptions), (req, res) => {
+app.get("/getimagesurl", (req, res) => {
   s3.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
     if (err) {
       console.log(err);
