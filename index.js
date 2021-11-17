@@ -38,6 +38,10 @@ var upload = multer({
   }),
 });
 
+app.get("/",(req,res) => {
+  res.send("Hare Krishna, Everything looks perfect!")
+})
+
 app.get("/getimagesurl", (req, res) => {
   s3.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
     if (err) {
@@ -56,21 +60,7 @@ app.get("/getimagesurl", (req, res) => {
 
 app.use(errorhandler());
 
-//Uploading single File to aws s3 bucket
-// app.post('/upload', upload.single('file'), function (req, res, next) {
-//    res.send({
-//        data: req.files,
-//        msg: 'Successfully uploaded files!'
-//    })
-// })
 
-// //Uploading Multiple Files to aws s3 bucket
-// app.post('/upload', upload.array('photos', 3), function (req, res, next) {
-//    res.send({
-//        data: req.files,
-//        msg: 'Successfully uploaded ' + req.files.length + ' files!'
-//    })
-// })
 
 app.listen(5000, function () {
   console.log("Server runs like Bolt");
