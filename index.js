@@ -4,13 +4,16 @@ var multer = require("multer");
 var multerS3 = require("multer-s3");
 var app = express();
 var cors = require("cors");
-
-app.use(express.json());
+var errorhandler = require("errorhandler")
 
 var corsOptions = {
-    origin: 'https://iskcon-solapur.web.app',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
+  origin: 'https://iskcon-solapur.web.app',
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
+app.use(express.json());
+app.options('*', cors())
+
 var s3 = new aws.S3({
   accessKeyId: "AKIA6PX5RHJWPJZVF7FV",
   secretAccessKey: "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",
@@ -30,7 +33,7 @@ var upload = multer({
   }),
 });
 
-app.get("/getimagesurl", cors(corsOptions), (req, res) => {
+app.get("/getimagesurl", (req, res) => {
   s3.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
     if (err) {
       console.log(err);
@@ -45,6 +48,9 @@ app.get("/getimagesurl", cors(corsOptions), (req, res) => {
     }
   });
 });
+
+app.use(errorhandler())
+
 
 //Uploading single File to aws s3 bucket
 // app.post('/upload', upload.single('file'), function (req, res, next) {
@@ -65,3 +71,4 @@ app.get("/getimagesurl", cors(corsOptions), (req, res) => {
 app.listen(5000, function () {
   console.log("Server runs like Bolt");
 });
+
