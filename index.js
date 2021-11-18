@@ -57,6 +57,15 @@ app.get("/getimagesurl", (req, res) => {
   });
 });
 
+// Uploading single File to aws s3 bucket
+app.post('/upload', upload.single('file'), function (req, res, next) {
+   res.send({
+       data: req.files,
+       msg: 'Successfully uploaded files!'
+   })
+})
+
+
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log("Server runs like Bolt on " + port);
