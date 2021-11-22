@@ -1,11 +1,12 @@
-var aws = require("aws-sdk");
-var express = require("express");
-var multer = require("multer");
-var multerS3 = require("multer-s3");
-var app = express();
-var cors = require("cors");
+const express = require("express");
+const app = express();
+const cors = require("cors");
 
-// var allowedOrigins = ['https://iskcon-solapur.web.app'];
+// API IMPORTS
+const get_Controllers = require("./Controllers/getControllers");
+const post_Controllers = require("./Controllers/postControllers");
+
+// const allowedOrigins = ['https://iskcon-solapur.web.app'];
 app.use(
   cors({
     allowedHeaders: ["authorization", "Content-Type"],
@@ -15,58 +16,19 @@ app.use(
     preflightContinue: false,
   })
 );
-
 app.use(express.json());
-
-var s3 = new aws.S3({
-  accessKeyId: "AKIA6PX5RHJWPJZVF7FV",
-  secretAccessKey: "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",
-  Bucket: "bhaktivedant-bucketv",
-});
-
-var upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: "bhaktivedant-bucketv",
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function (req, file, cb) {
-      cb(null, Date.now().toString());
-    },
-  }),
-});
 
 app.get("/",(req,res) => {
   res.send("Hare Krishna, Everything looks perfect!")
 })
 
-app.get("/getimagesurl", (req, res) => {
-  s3.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const imageData = data.Contents.map((image) => {
-        return {
-          key: image.Key,
-          url: `https://bhaktivedant-bucketv.s3.amazonaws.com/${image.Key}`,
-        };
-      });
-      res.send(imageData);
-    }
-  });
-});
 
-// Uploading single File to aws s3 bucket
-app.post('/upload', upload.single('file'), function (req, res, next) {
-   res.send({
-       data: req.files,
-       msg: 'Successfully uploaded files!'
-   })
-})
+// API Initialization 
+
+app.use(get_Controllers);
+app.use(post_Controllers);
 
 
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-    console.log("Server runs like Bolt on " + port);
+app.listen(process.env.PORT || 8080, () => {
+    console.log("Server runs like Bolt");
 });
