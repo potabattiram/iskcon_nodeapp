@@ -15,7 +15,7 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, date.getDate()+"_"+date.getMonth()+"_"+date.getFullYear()+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
+      cb(null, date.getDate()+"_"+date.getMonth()+1+"_"+date.getFullYear()+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
     },
   }),
 });
