@@ -3,12 +3,11 @@ const app = express();
 const cors = require("cors");
 
 // DOMAIN
-const allowedOrigins = ['https://iskcon-solapur.web.app'];
-
+// const allowedOrigins = 'https://iskcon-solapur.web.app';
 
 // CORS HANDLER
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -24,7 +23,7 @@ app.use(
   cors({
     allowedHeaders: ["authorization", "Content-Type"],
     exposedHeaders: ["authorization"],
-    origin: allowedOrigins,
+    origin: '*',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
   })
