@@ -34,4 +34,19 @@ router.post("/upload", upload.single("file"), function (req, res) {
   
 });
 
+
+router.post('/upload/many', upload.array('file', 10), function (req, res, next) {
+  if (res.statusCode == 200) {
+    res.send({
+      len: req.files.length,
+      msg: "Successfully uploaded files!",
+    });
+    
+  }
+  else{
+    res.send("Error")
+  }
+})
+
+
 module.exports = router;
