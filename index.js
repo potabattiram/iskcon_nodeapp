@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const cluster = require('cluster');
+const os = require('os');
+
+// NUMBER OF PORTS INSIDE OUR CPU
+const numCPU = os.cpus().length;
 
 // DOMAIN
 // const allowedOrigins = 'https://iskcon-solapur.web.app';
@@ -30,7 +35,7 @@ app.use(
 );
 
 app.get("/",(req,res) => {
-  res.send("Hare Krishna, Everything looks perfect!")
+  res.send(`Hare Krishna, Everything looks perfect by Worker ${process.pid}!`)
 })
 
 
@@ -38,6 +43,12 @@ app.get("/",(req,res) => {
 app.use(get_Controllers);
 app.use(post_Controllers);
 
-app.listen(process.env.PORT || 8080, () => {
-    console.log("Server runs like Bolt");
+if(cluster.isMaster){
+  for(let i=0;i<=numCPU;i++){
+    cluster.fork()
+  }
+}else{
+  app.listen(process.env.PORT || 9545, () => {
+    console.log(`Server ${process.pid} runs like Usain Bolt, Click @ http://localhost:9545`);
 });
+}
