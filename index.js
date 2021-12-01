@@ -49,6 +49,6 @@ if(cluster.isMaster){
   }
 }else{
   app.listen(process.env.PORT || 9545, () => {
-    console.log(`Server ${process.pid} runs like Usain Bolt, Click @ http://localhost:9545`);
+    console.log(`Server ${process.pid} runs like Usain Bolt, Click @ http://localhost:3001`);
 });
 }

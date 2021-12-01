@@ -6,6 +6,7 @@ const s3_Connection = require("../Connections/AWS_Connections");
 const path = require("path");
 
 var date = new Date();
+var today = ("0" + (date.getDate())).slice(-2)
 var month = date.getMonth() + 1;
 const upload = multer({
   storage: multerS3({
@@ -15,7 +16,7 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, date.getDate()+"_"+month+"_"+date.getFullYear()+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
+      cb(null, today+"_"+month+"_"+date.getFullYear()+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
     },
   }),
 });
