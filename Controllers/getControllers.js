@@ -58,7 +58,8 @@ Router.get("/deletealleventimages",(req,res) => {
           return img
         }
       });
-      myFilterArray.forEach((img) => {
+      if(myFilterArray.length>0){
+        myFilterArray.forEach((img) => {
         s3_Connection.deleteObject({
           Bucket: "dailyeventimages",
           Key: img.key,
@@ -66,10 +67,16 @@ Router.get("/deletealleventimages",(req,res) => {
           if (err) {
             res.send(err);
           } else {
-            res.send("Success in deleting images");
+            res.status(200).send("Deleted Successfully");
           }
         });
       });
+      }
+      else{
+        res.status(202).send("No images to delete");
+      }
+          
+      
     }
   })
  
