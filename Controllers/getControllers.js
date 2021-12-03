@@ -29,7 +29,7 @@ Router.get("/geteventimages", (req, res) => {
   const datee = ("0" + (date.getDate())).slice(-2);
   s3_Connection.listObjects({ Bucket: "dailyeventimages" }, (err, data) => {
     if (err) {
-      console.log(err);
+      res.send(err);
     } else {
      const imageData = data.Contents.map((img) => {
         return {
