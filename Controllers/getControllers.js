@@ -25,15 +25,13 @@ Router.get("/getimagesurl/:date", (req, res) => {
 
 
 Router.get("/geteventimages", (req, res) => {
-  const date=new Date();
-  const datee = ("0" + (date.getDate())).slice(-2);
   s3_Connection.listObjects({ Bucket: "dailyeventimages" }, (err, data) => {
     if (err) {
       res.send(err);
     } else {
      const imageData = data.Contents.map((img) => {
         return {
-          key: img.Key ? (img.Key.startsWith(datee)  && img.Key) : null,
+          key: img.Key ? (img.Key.startsWith("0000")  && img.Key) : null,
         };
       });
       res.send(imageData);
