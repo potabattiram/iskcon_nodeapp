@@ -3,9 +3,6 @@ const Router = express.Router();
 const s3_Connection = require("../Connections/AWS_Connections");
 const fs = require('fs');
 
-function getObjectsFromBucket(date){
-  
-}
 
 Router.get("/getimagesurl/:date", (req, res) => {
   const month = new Date().getMonth()+1;
@@ -15,47 +12,76 @@ Router.get("/getimagesurl/:date", (req, res) => {
     const cacheData = fs.readFileSync('./Controllers/cacheData.json','utf-8');
     if(cacheData){
       const processedData = JSON.parse(cacheData)
-      res.send(processedData);
+      if(processedData[0].key.startsWith(date)){
+        res.send(processedData);
+      }
+      else{
+        s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
+          if (err) {
+            res.send(err)
+          } else {
+            const imageData = data.Contents.map((img) => {
+              return {
+                key: img.Key ? (img.Key.startsWith(date) && img.Key) : null,
+              };
+            });
+            var myFilterArray = imageData.filter((img) => {
+              if (img.key){
+                return img
+              }
+            });
+            if(date == toDay){
+            fs.writeFileSync('./Controllers/cacheData.json', JSON.stringify(myFilterArray,null,2));
+
+            }
+            res.send(myFilterArray);
+          }
+        });
+      }
     }
     else{
-     s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
-      if (err) {
-        res.send(err)
-      } else {
-        const imageData = data.Contents.map((img) => {
-          return {
-            key: img.Key ? (img.Key.startsWith(date) && img.Key) : null,
-          };
-        });
-        var myFilterArray = imageData.filter((img) => {
-          if (img.key){
-            return img
+      s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
+        if (err) {
+          res.send(err)
+        } else {
+          const imageData = data.Contents.map((img) => {
+            return {
+              key: img.Key ? (img.Key.startsWith(date) && img.Key) : null,
+            };
+          });
+          var myFilterArray = imageData.filter((img) => {
+            if (img.key){
+              return img
+            }
+          });
+          if(date == toDay){
+          fs.writeFileSync('./Controllers/cacheData.json', JSON.stringify(myFilterArray,null,2));
           }
-        });
-        fs.writeFileSync('./Controllers/cacheData.json', JSON.stringify(myFilterArray,null,2));
-        res.send(myFilterArray);
-      }
-    });
+          res.send(myFilterArray);
+        }
+      });
     }
   }
-    s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
-      if (err) {
-        res.send(err)
-      } else {
-        const imageData = data.Contents.map((img) => {
-          return {
-            key: img.Key ? (img.Key.startsWith(date) && img.Key) : null,
-          };
-        });
-        var myFilterArray = imageData.filter((img) => {
-          if (img.key){
-            return img
-          }
-        });
-        fs.writeFileSync('./Controllers/cacheData.json', JSON.stringify(myFilterArray,null,2));
-        res.send(myFilterArray);
+  s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
+    if (err) {
+      res.send(err)
+    } else {
+      const imageData = data.Contents.map((img) => {
+        return {
+          key: img.Key ? (img.Key.startsWith(date) && img.Key) : null,
+        };
+      });
+      var myFilterArray = imageData.filter((img) => {
+        if (img.key){
+          return img
+        }
+      });
+      if(date == toDay){
+      fs.writeFileSync('./Controllers/cacheData.json', JSON.stringify(myFilterArray,null,2));
       }
-    });
+      res.send(myFilterArray);
+    }
+  });
 });
 
 
