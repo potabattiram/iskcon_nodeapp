@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const cluster = require('cluster');
-const os = require('os');
+const cluster = require("cluster");
+const os = require("os");
 
 // NUMBER OF PORTS INSIDE OUR CPU
 const numCPU = os.cpus().length;
@@ -12,10 +12,16 @@ const numCPU = os.cpus().length;
 
 // CORS HANDLER
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
@@ -28,27 +34,28 @@ app.use(
   cors({
     allowedHeaders: ["authorization", "Content-Type"],
     exposedHeaders: ["authorization"],
-    origin: '*',
+    origin: "*",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
   })
 );
 
-app.get("/",(req,res) => {
-  res.send(`Hare Krishna, Everything looks perfect by Worker ${process.pid}!`)
-})
-
+app.get("/", (req, res) => {
+  res.send(`Hare Krishna, Everything looks perfect by Worker ${process.pid}!`);
+});
 
 // API Initialization
 app.use(get_Controllers);
 app.use(post_Controllers);
 
-if(cluster.isMaster){
-  for(let i=0;i<=numCPU;i++){
-    cluster.fork()
+if (cluster.isMaster) {
+  for (let i = 0; i <= numCPU; i++) {
+    cluster.fork();
   }
-}else{
+} else {
   app.listen(process.env.PORT || 3001, () => {
-    console.log(`Server ${process.pid} runs like Usain Bolt, Click @ http://localhost:3001`);
-});
+    console.log(
+      `Server ${process.pid} runs like Usain Bolt, Click @ http://localhost:3001`
+    );
+  });
 }
