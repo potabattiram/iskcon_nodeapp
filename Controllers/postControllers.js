@@ -4,6 +4,9 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const s3_Connection = require("../Connections/AWS_Connections");
 const path = require("path");
+const {GoogleSpreadsheet} = require('google-spreadsheet')
+const fs = require("fs");
+const { google } = require("googleapis");
 
 
 var date = new Date();
@@ -56,6 +59,7 @@ const uploadPrevEvents = multer({
     },
   }),
 });
+
 router.post("/upload/dailyEvent", uploadPrevEvents.single("file"), (req,res) => {
   if (res.statusCode == 200) {
     res.send({
@@ -68,6 +72,26 @@ router.post("/upload/dailyEvent", uploadPrevEvents.single("file"), (req,res) => 
   }
   
 })
+
+router.get("/api/event",async(req,res) => {
+  const auth = new google.auth.GoogleAuth({
+    keyFile: "Controllers/utsavCredentials.json", 
+    scopes: "https://www.googleapis.com/auth/spreadsheets", 
+});
+  const authClientObject = await auth.getClient();
+  const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObject });
+  const spreadsheetId = "1fgVrWACiEQhuaPs7UoudAXZSO4xdUdvudIGvRj4yDrA";
+
+  const readData = await googleSheetsInstance.spreadsheets.values.get({
+    auth, //auth object
+    spreadsheetId, // spreadsheet id
+    range: "Sheet1!A:A", //range of cells to read from.
+})
+res.send(readData.data)
+})
+
+
+
 
 
 module.exports = router;
