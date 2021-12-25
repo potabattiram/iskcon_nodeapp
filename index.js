@@ -28,6 +28,7 @@ app.use(function (req, res, next) {
 // API IMPORTS
 const get_Controllers = require("./Controllers/getControllers");
 const post_Controllers = require("./Controllers/postControllers");
+const event_Controllers = require("./Controllers/eventControllers/mainController");
 
 app.use(express.json());
 app.use(
@@ -47,15 +48,16 @@ app.get("/", (req, res) => {
 // API Initialization
 app.use(get_Controllers);
 app.use(post_Controllers);
+app.use(event_Controllers);
 
-// if (cluster.isMaster) {
-//   for (let i = 0; i <= numCPU; i++) {
-//     cluster.fork();
-//   }
-// } else {
+if (cluster.isMaster) {
+  for (let i = 0; i <= numCPU; i++) {
+    cluster.fork();
+  }
+} else {
   app.listen(process.env.PORT || 3001, () => {
     console.log(
       `Server ${process.pid} runs like Usain Bolt, Click @ http://localhost:3001`
     );
   });
-// }
+}

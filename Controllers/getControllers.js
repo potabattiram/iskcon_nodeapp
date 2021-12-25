@@ -1,20 +1,10 @@
 const express = require("express");
 const Router = express.Router();
 const s3_Connection = require("../Connections/AWS_Connections");
-const fs = require('fs');
-
 
 
 Router.get("/getimagesurl/:date", (req, res) => {
   const date = req.params.date;
-  const month = new Date().getMonth()+1;
-  const toDay = new Date().getDate() + "_" + month + "_" + new Date().getFullYear();
-  // const cacheData = fs.readFileSync('./Controllers/cacheData.json','utf-8');
-  // const processedData = cacheData && JSON.parse(cacheData)
-  // if(date == toDay && processedData && processedData[0].key.startsWith(toDay))
-  // {
-  //   res.send(processedData) 
-  // }
   s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
     if (err) {
       res.send("err")
@@ -30,13 +20,6 @@ Router.get("/getimagesurl/:date", (req, res) => {
             return img 
           }
         });
-        // if(date==toDay)
-        // {
-        //   fs.writeFileSync('./Controllers/cacheData.json', JSON.stringify(myFilterArray,null,2));
-        // }
-        // else{
-        //   null
-        // }
         res.send(myFilterArray);
       }
     }
@@ -96,11 +79,6 @@ Router.get("/deletealleventimages",(req,res) => {
     }
   })
 })
-
-
-
-
-
 
 
 
