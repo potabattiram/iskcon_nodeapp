@@ -2,7 +2,7 @@ const express = require("express");
 const Router = express.Router();
 const Connection = require("../../Connections/remoteMySqlConnection");
 
-Router.post("/api/event/data", (req, res) => {
+Router.post("/api/add_data", (req, res) => {
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;

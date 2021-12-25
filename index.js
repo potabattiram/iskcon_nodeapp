@@ -29,6 +29,7 @@ app.use(function (req, res, next) {
 const get_Controllers = require("./Controllers/getControllers");
 const post_Controllers = require("./Controllers/postControllers");
 const event_Controllers = require("./Controllers/eventControllers/mainController");
+const getController = require("./Controllers/EventControllers/getData");
 
 app.use(express.json());
 app.use(
@@ -49,6 +50,7 @@ app.get("/", (req, res) => {
 app.use(get_Controllers);
 app.use(post_Controllers);
 app.use(event_Controllers);
+app.use(getController);
 
 if (cluster.isMaster) {
   for (let i = 0; i <= numCPU; i++) {
