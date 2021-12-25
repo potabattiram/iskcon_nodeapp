@@ -5,7 +5,9 @@ const Connection = require("../../Connections/remoteMySqlConnection");
 Router.get("/api/get_data", (req, res) => {
   const query = "SELECT * FROM iskconEventData";
   Connection.query(query, (err, result) => {
-    if (err) throw err;
+    if (err){
+      res.send(err)
+    }
     res.send(result);
   });
 });
