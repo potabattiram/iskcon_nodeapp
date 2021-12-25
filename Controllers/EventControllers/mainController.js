@@ -12,7 +12,9 @@ Router.post("/api/add_data", (req, res) => {
   const query = `INSERT INTO iskconEventData (name,phone,email,addr,upiid) VALUES ('${name}','${phone}','${email}','${addr}','${upiid}')`;
   Connection.query(query, (err, result) => {
     if (err) throw err;
-    res.send("Successfully Image Uploaded and Data Inserted");
+    else{
+      res.send("Successfully Image Uploaded and Data Inserted");
+    }
   });
 });
 
