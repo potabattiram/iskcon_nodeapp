@@ -7,9 +7,6 @@ const os = require("os");
 // NUMBER OF PORTS INSIDE OUR CPU
 const numCPU = os.cpus().length;
 
-// DOMAIN
-// const allowedOrigins = 'https://iskcon-solapur.web.app';
-
 // CORS HANDLER
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -30,6 +27,9 @@ const get_Controllers = require("./Controllers/getControllers");
 const post_Controllers = require("./Controllers/postControllers");
 const mainController = require("./Controllers/EventControllers/mainController");
 const getController = require("./Controllers/EventControllers/getData");
+
+// PERSONAL
+const personalController = require("./Controllers/OtherControllers/main");
 
 app.use(express.json());
 app.use(
@@ -52,6 +52,7 @@ app.use(get_Controllers);
 app.use(post_Controllers);
 app.use(mainController);
 app.use(getController);
+app.use(personalController);
 
 if (cluster.isMaster) {
   for (let i = 0; i <= numCPU; i++) {
