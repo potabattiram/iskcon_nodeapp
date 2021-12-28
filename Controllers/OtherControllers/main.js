@@ -39,12 +39,12 @@ Router.get("/api/personal/sendmail", (req, res) => {
   JSON.parse(data);
   if (!data.includes(toDay)) {
     const query = `SELECT * FROM friendsList WHERE birthdate='${toDay}'`;
-    Connection.query(query, (err, result) => {
+    Connection.query(query, async(err, result) => {
       if (err) {
         res.send(err);
       } else {
-        if (result) {
-          const emailList = result.map((item) => {
+        if (result.length > 0) {
+          const emailList = await result.map((item) => {
             return {
               name: item.fullname,
               email: item.email,
@@ -55,8 +55,7 @@ Router.get("/api/personal/sendmail", (req, res) => {
               from: "potabattiram@gmail.com",
               to: emailList[i].email,
               subject: "Birthday Wishes!🎂",
-              html:
-                "<br>Hello, " +
+              html: "<br>Hello, " +
                 emailList[i].name +
                 "!" +
                 "<br>How are you? " +
