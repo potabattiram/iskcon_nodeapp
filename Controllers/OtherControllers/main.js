@@ -8,7 +8,7 @@ Router.post("/api/personal", (req, res) => {
   const email = req.body.email;
   const birthdate = req.body.birthdate;
 
-  const ValidationQuery = `SELECT * FROM friendsList WHERE email = '${email}' and fullname = '${fullname}' and birthdate = '${birthdate}'`;
+  const ValidationQuery = `SELECT * FROM friendsList WHERE email = '${email}'`;
   Connection.query(ValidationQuery, (err, data) => {
     if (err) {
       res.send(err);
