@@ -16,6 +16,7 @@ Router.post("/api/add_data", (req, res) => {
     }
     else{
       if(results.length > 0){
+        res.sendStatus(400)
         res.send("UPIID already exists!")
       }
       else{
