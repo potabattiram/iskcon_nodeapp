@@ -32,7 +32,7 @@ Router.post("/api/personal", (req, res) => {
 Router.get("/api/personal/sendmail", (req, res) => {
   const date = new Date();
   const month = date.getMonth() + 1;
-  const toDay = date.getDate() + "_" + month + "_" + date.getFullYear();
+  const toDay = date.getDate() + "_" + month;
   const filePath = "Controllers/OtherControllers/check.json";
 
   const data = fs.readFileSync(filePath, "utf-8");
