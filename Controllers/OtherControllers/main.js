@@ -86,4 +86,16 @@ Router.get("/api/personal/sendmail", (req, res) => {
   }
 });
 
+Router.get("/api/getData",(req,res) => {
+  const query = `SELECT * FROM friendsList`;
+  Connection.query(query,(err,result) => {
+    if(err){
+      res.send(err);
+    }
+    else{
+      res.send(result.data);
+    }
+  })
+})
+
 module.exports = Router;
