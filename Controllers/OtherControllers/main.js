@@ -86,7 +86,7 @@ Router.get("/api/personal/sendmail", (req, res) => {
   }
 });
 
-Router.get("/api/getData",(req,res) => {
+Router.get("/api/getfriendslist",(req,res) => {
   const query = `SELECT * FROM friendsList`;
   Connection.query(query,(err,result) => {
     if(err){
