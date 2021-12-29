@@ -93,7 +93,7 @@ Router.get("/api/getfriendslist",(req,res) => {
       res.send(err);
     }
     else{
-      res.send(result.data);
+      res.send(result);
     }
   })
 })
