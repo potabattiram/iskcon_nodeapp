@@ -56,14 +56,14 @@ app.use(getController);
 app.use(personalController);
 app.use(webdev);
 
-if (cluster.isMaster) {
-  for (let i = 0; i <= numCPU; i++) {
-    cluster.fork();
-  }
-} else {
+// if (cluster.isMaster) {
+//   for (let i = 0; i <= numCPU; i++) {
+//     cluster.fork();
+//   }
+// } else {
   app.listen(process.env.PORT || 3001, () => {
     console.log(
       `Server ${process.pid} runs like Usain Bolt, Click @ http://localhost:3001`
     );
   });
-}
+// }

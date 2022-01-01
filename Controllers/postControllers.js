@@ -5,9 +5,11 @@ const multerS3 = require("multer-s3");
 const s3_Connection = require("../Connections/AWS_Connections");
 const path = require("path");
 
-var date = new Date();
-var today = ("0" + (date.getDate())).slice(-2)
-var month = ("0" + (date.getMonth()+1)).slice(-2)
+const date = new Date();
+const today = ("0" + (date.getDate())).slice(-2)
+const month = ("0" + (date.getMonth()+1)).slice(-2)
+const year = date.getFullYear()
+const name = today+"_"+month+"_"+year+"_"+Math.floor(1000 + Math.random() * 9000) 
 const uploadDailyDarshan = multer({
   storage: multerS3({
     s3: s3_Connection,
@@ -16,7 +18,7 @@ const uploadDailyDarshan = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, today+"_"+month+"_"+date.getFullYear()+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
+      cb(null, name+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
     },
   }),
 });
@@ -37,12 +39,7 @@ router.post("/upload", uploadDailyDarshan.single("file"), function (req, res) {
 
 
 
-
 // UPLOAD DAILY EVENT IMAGES
-var date = new Date();
-var zeros = "0000";
-var today = ("0" + (date.getDate())).slice(-2);
-var month = date.getMonth() + 1;
 const uploadPrevEvents = multer({
   storage: multerS3({
     s3: s3_Connection,
@@ -51,7 +48,7 @@ const uploadPrevEvents = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null,zeros + "_" + today+"_"+month+"_"+date.getFullYear()+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
+      cb(null,zeros + "_" +name+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
     },
   }),
 });
