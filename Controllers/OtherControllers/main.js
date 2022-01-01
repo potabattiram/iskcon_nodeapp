@@ -98,5 +98,17 @@ Router.get("/api/getfriendslist",(req,res) => {
   })
 })
 
+Router.get("/api/deleteemail/:deleteemail",(req,res) =>{
+  const deleteemail = req.params.deleteemail;
+  const query = `DELETE FROM friendsList WHERE email = '${deleteemail}'`;
+  Connection.query(query,(err,result) => {
+    if(err) {
+      res.send(err)
+    }
+    else{
+      res.send("Successfully Deleted")
+    }
+  })
+})
 
 module.exports = Router;
