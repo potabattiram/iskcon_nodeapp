@@ -7,7 +7,7 @@ const path = require("path");
 
 var date = new Date();
 var today = ("0" + (date.getDate())).slice(-2)
-var month = "0" + (date.getMonth()+1).slice(-2) 
+var month = ("0" + (date.getMonth()+1)).slice(-2)
 const uploadDailyDarshan = multer({
   storage: multerS3({
     s3: s3_Connection,
