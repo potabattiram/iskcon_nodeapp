@@ -30,15 +30,16 @@ Router.post("/api/personal", (req, res) => {
 });
 
 Router.get("/api/personal/sendmail", (req, res) => {
-  const date = new Date();
-  const month = date.getMonth() + 1;
-  const toDay = date.getDate() + "_" + month;
+  const nDate = new Date();
+  const today = ("0" + (nDate.getDate())).slice(-2)
+  const month = ("0" + (nDate.getMonth()+1)).slice(-2)
+  const todate = today + "_" + month;
   const filePath = "Controllers/OtherControllers/check.json";
 
   const data = fs.readFileSync(filePath, "utf-8");
   JSON.parse(data);
-  if (!data.includes(toDay)) {
-    const query = `SELECT * FROM friendsList WHERE birthdate='${toDay}'`;
+  if (!data.includes(todate)) {
+    const query = `SELECT * FROM friendsList WHERE birthdate='${todate}'`;
     Connection.query(query, async(err, result) => {
       if (err) {
         res.send(err);
@@ -69,7 +70,7 @@ Router.get("/api/personal/sendmail", (req, res) => {
                 res.send(err);
               }
               if (success) {
-                fs.writeFileSync(filePath, JSON.stringify(toDay));
+                fs.writeFileSync(filePath, JSON.stringify(todate));
                 res.send("Email Sent Success!");
               } else {
                 res.send("Email Not Sent! Failure");
