@@ -5,39 +5,36 @@ const s3_Connection = require("../Connections/AWS_Connections");
 
 Router.get("/getimagesurl/:date", (req, res) => {
   const date = req.params.date;
-  s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, (err, data) => {
+  s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, async(err, data) => {
     if (err) {
       res.send("err")
     } else {
       if(data != null){
-        const imageData = data.Contents.map((img) => {
-          return {
-            key: img.Key ? (img.Key.startsWith(date) && img.Key) : null,
-          };
-        });
-        var myFilterArray = imageData.filter((img) => {
-          if (img.key){
-            return img 
-          }
-        });
-        res.send(myFilterArray);
+        const imageData = await data.Contents.filter((img) => img.Key.startsWith(date)).map((processedImage) => processedImage.Key)
+        res.send(imageData)
+      }
+      else{
+        res.send("No data found")
       }
     }
   });
 });
 
 
-Router.get("/geteventimages", (req, res) => {
+Router.get("/geteventimages",(req, res) => {
   s3_Connection.listObjects({ Bucket: "dailyeventimages" }, (err, data) => {
     if (err) {
       res.send(err);
     } else {
-     const imageData = data.Contents.map((img) => {
-        return {
-          key: img.Key ? (img.Key.startsWith("0000")  && img.Key) : null,
-        };
-      });
+    //  const imageData = data.Contents.map((img) => {
+    //     return {
+    //       key: img.Key ? (img.Key.startsWith("0000")  && img.Key) : null,
+    //     };
+    //   });
+      const imageData = data.Contents.filter((img) => img.Key.startsWith("0000"))
       res.send(imageData);
+
+
     }
   });
 });
