@@ -2,7 +2,6 @@ const express = require("express");
 const Router = express.Router();
 const s3_Connection = require("../Connections/AWS_Connections");
 
-
 Router.get("/getimagesurl/:date", (req, res) => {
   const date = req.params.date;
   s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, async(err, data) => {
