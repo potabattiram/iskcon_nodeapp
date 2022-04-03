@@ -23,7 +23,7 @@ const uploadDailyDarshan = multer({
   }),
 });
 
-router.post("/upload", uploadDailyDarshan.single("file"), function (req, res) {
+router.post("/upload", uploadDailyDarshan.array("file"), function (req, res) {
   if (res.statusCode == 200) {
     res.send({
       data: req.files,
