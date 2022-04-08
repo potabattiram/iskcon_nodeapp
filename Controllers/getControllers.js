@@ -6,7 +6,7 @@ Router.get("/getimagesurl/:date", (req, res) => {
   const date = req.params.date;
   s3_Connection.listObjects({ Bucket: "bhaktivedant-bucketv" }, async(err, data) => {
     if (err) {
-      res.send("err")
+      res.send(err)
     } else {
       if(data != null){
         const imageData = await data.Contents.filter((img) => img.Key.startsWith(date)).map((processedImage) => processedImage.Key)
