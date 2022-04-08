@@ -25,12 +25,6 @@ app.use(function (req, res, next) {
 // API IMPORTS
 const get_Controllers = require("./Controllers/getControllers");
 const post_Controllers = require("./Controllers/postControllers");
-const mainController = require("./Controllers/EventControllers/mainController");
-const getController = require("./Controllers/EventControllers/getData");
-// const webdev = require("./Controllers/WebDev/webdevMain");
-
-// PERSONAL
-const personalController = require("./Controllers/OtherControllers/main");
 
 app.use(express.json());
 app.use(
@@ -51,10 +45,7 @@ app.get("/", (req, res) => {
 // API Initialization
 app.use(get_Controllers);
 app.use(post_Controllers);
-// app.use(mainController);
-// app.use(getController);
-// app.use(personalController);
-// app.use(webdev);
+
 
 if (cluster.isMaster) {
   for (let i = 0; i <= numCPU; i++) {
