@@ -82,12 +82,25 @@ router.post("/addeventdata",(req,res) => {
 
 router.delete("/deleteevent",(req,res) =>{
   const eventname = req.body.eventname;
-  Connection.query("DELETE FROM iskconevents WHERE eventname = ?",[eventname],(err,data) => {
-    if(err) {
-      res.send(err);
+  Connection.query("SELECT * FROM iskconevents WHERE eventname = ?",[eventname],(err,data) => {
+    if(err){
+      res.send(err)
     }
     else{
-      res.send("Successfully deleted event");
+      if(data.length > 0){
+        const query = `DELETE FROM iskconevents WHERE eventname = '${eventname}'`;
+        Connection.query(query,(err,data) => {
+          if(err){
+            res.send(err)
+          }
+          else{
+            res.status(200).send({msg:"Successfully deleted event"})
+          }
+        })
+      }
+      else{
+        res.status(200).send({msg:"Event not found"})
+      }
     }
   })
 })
