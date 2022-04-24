@@ -87,7 +87,6 @@ router.delete("/deleteevent",(req,res) =>{
       res.send(err)
     }
     else{
-      if(data.length > 0){
         const query = `DELETE FROM iskconevents WHERE eventname = '${eventname}'`;
         Connection.query(query,(err,data) => {
           if(err){
@@ -97,10 +96,6 @@ router.delete("/deleteevent",(req,res) =>{
             res.status(200).send({msg:"Successfully deleted event"})
           }
         })
-      }
-      else{
-        res.status(200).send({msg:"Event not found"})
-      }
     }
   })
 })
