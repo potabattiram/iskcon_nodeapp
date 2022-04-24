@@ -4,6 +4,7 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 const s3_Connection = require("../Connections/AWS_Connections");
 const path = require("path");
+const Connection = require("../Connections/DB_Connection.js");
 
 const date = new Date();
 const today = ("0" + (date.getDate())).slice(-2)
@@ -66,9 +67,30 @@ router.post("/upload/dailyEvent", uploadPrevEvents.single("file"), (req,res) => 
   
 })
 
+router.post("/addeventdata",(req,res) => {
+  const {eventname,date,time} = req.body;
+  const query = `INSERT INTO iskconevents (eventname,date,time) VALUES ('${eventname}','${date}','${time}')`;
+  Connection.query(query,(err,data) => {
+    if(err) {
+      res.send(err);
+    }
+    else{
+      res.status(200).send({msg:"Successfully added event"})
+    }
+  })
+})
 
-
-
+router.delete("/deleteevent",(req,res) =>{
+  const eventname = req.body.eventname;
+  Connection.query("DELETE FROM iskconevents WHERE eventname = ?",[eventname],(err,data) => {
+    if(err) {
+      res.send(err);
+    }
+    else{
+      res.send("Successfully deleted event");
+    }
+  })
+})
 
 module.exports = router;
 

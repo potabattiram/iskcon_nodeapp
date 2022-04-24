@@ -1,6 +1,7 @@
 const express = require("express");
 const Router = express.Router();
 const s3_Connection = require("../Connections/AWS_Connections");
+const Connection = require("../Connections/DB_Connection.js");
 
 Router.get("/getimagesurl/:date", (req, res) => {
   const date = req.params.date;
@@ -20,67 +21,25 @@ Router.get("/getimagesurl/:date", (req, res) => {
 });
 
 
-Router.get("/geteventimages",(req, res) => {
-  s3_Connection.listObjects({ Bucket: "dailyeventimages" }, (err, data) => {
-    if (err) {
-      res.send(err);
-    } else {
-    //  const imageData = data.Contents.map((img) => {
-    //     return {
-    //       key: img.Key ? (img.Key.startsWith("0000")  && img.Key) : null,
-    //     };
-    //   });
-      const imageData = data.Contents.filter((img) => img.Key.startsWith("0000"))
-      res.send(imageData);
 
-
-    }
-  });
-});
-
-
-Router.get("/deletealleventimages",(req,res) => {
-  s3_Connection.listObjects({ Bucket: "dailyeventimages" }, (err, data) => {
-    if(err){
+Router.get("/geteventdata",(req,res) => {
+  Connection.query("SELECT * from iskconevents",(err,data) => {
+    if(err) {
       res.send(err);
     }
     else{
-      const imageData = data.Contents.map((img) => {
-        return {
-          key: img.Key ? (img.Key.startsWith("0000") && img.Key) : null,
-        };
-      });
-      var myFilterArray = imageData.filter((img) => {
-        if (img.key){
-          return img
-        }
-      });
-      if(myFilterArray.length>0){
-        myFilterArray.forEach((img) => {
-        s3_Connection.deleteObject({
-          Bucket: "dailyeventimages",
-          Key: img.key,
-        }, (err, data) => {
-          if (err) {
-            res.send(err);
-          } else {
-            res.status(200).send("Deleted Successfully");
-          }
-        });
-      });
+      if(data.length > 0){
+        res.send(data);
       }
       else{
-        res.status(202).send("No images to delete");
+        res.send("No Data to show!")
       }
     }
   })
 })
 
 
-
-
 module.exports = Router;
-
 
 
 
@@ -122,6 +81,64 @@ module.exports = Router;
 //         };
 //       })
 //       res.send(imageData);
+//     }
+//   })
+// })
+
+
+
+// Router.get("/geteventimages",(req, res) => {
+//   s3_Connection.listObjects({ Bucket: "dailyeventimages" }, (err, data) => {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//     //  const imageData = data.Contents.map((img) => {
+//     //     return {
+//     //       key: img.Key ? (img.Key.startsWith("0000")  && img.Key) : null,
+//     //     };
+//     //   });
+//       const imageData = data.Contents.filter((img) => img.Key.startsWith("0000"))
+//       res.send(imageData);
+
+
+//     }
+//   });
+// });
+
+
+// Router.get("/deletealleventimages",(req,res) => {
+//   s3_Connection.listObjects({ Bucket: "dailyeventimages" }, (err, data) => {
+//     if(err){
+//       res.send(err);
+//     }
+//     else{
+//       const imageData = data.Contents.map((img) => {
+//         return {
+//           key: img.Key ? (img.Key.startsWith("0000") && img.Key) : null,
+//         };
+//       });
+//       var myFilterArray = imageData.filter((img) => {
+//         if (img.key){
+//           return img
+//         }
+//       });
+//       if(myFilterArray.length>0){
+//         myFilterArray.forEach((img) => {
+//         s3_Connection.deleteObject({
+//           Bucket: "dailyeventimages",
+//           Key: img.key,
+//         }, (err, data) => {
+//           if (err) {
+//             res.send(err);
+//           } else {
+//             res.status(200).send("Deleted Successfully");
+//           }
+//         });
+//       });
+//       }
+//       else{
+//         res.status(202).send("No images to delete");
+//       }
 //     }
 //   })
 // })
