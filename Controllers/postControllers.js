@@ -80,7 +80,7 @@ router.post("/addeventdata",(req,res) => {
   })
 })
 
-router.delete("/deleteevent",(req,res) =>{
+router.post("/deleteevent",(req,res) =>{
   const eventname = req.body.eventname;
   Connection.query("SELECT * FROM iskconevents WHERE eventname = ?",[eventname],(err,data) => {
     if(err){
