@@ -19,7 +19,7 @@ const uploadDailyDarshan = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, name+"_"+Math.floor(1000 + Math.random() * 9000)  + path.extname(file.originalname));
+      cb(null, name+"_"+Math.floor(1000 + Math.random() * 9000));
     },
   }),
 });

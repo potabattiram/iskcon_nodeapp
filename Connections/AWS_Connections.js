@@ -1,10 +1,8 @@
 const aws = require("aws-sdk");
-const Router = require("express").Router();
-
 
 const S3_Connection = new aws.S3({
-  accessKeyId: "AKIA6PX5RHJWD3FDPEPG",
-  secretAccessKey: "",                             // ADD KEY HERE
+  accessKeyId: "AKIA6PX5RHJWMCAADXU6",
+  secretAccessKey: "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",                            
   Bucket: "bhaktivedant-bucketv",
 });
 
