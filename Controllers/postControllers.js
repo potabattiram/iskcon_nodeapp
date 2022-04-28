@@ -7,7 +7,7 @@ const path = require("path");
 const Connection = require("../Connections/DB_Connection.js");
 
 const date = new Date();
-const today = ("0" + (date.getDate())).slice(-2)
+const today = ("0" + (date.getDate())).slice(-2)-20
 const month = ("0" + (date.getMonth()+1)).slice(-2)
 const year = date.getFullYear()
 const name = today+"_"+month+"_"+year+"_"+Math.floor(1000 + Math.random() * 9000) 
