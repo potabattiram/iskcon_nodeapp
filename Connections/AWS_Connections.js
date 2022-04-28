@@ -1,9 +1,13 @@
 const aws = require("aws-sdk");
+require('dotenv').config();
+
 
 const S3_Connection = new aws.S3({
-  accessKeyId: "AKIA6PX5RHJWMCAADXU6",
-  secretAccessKey: "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",                            
-  Bucket: "bhaktivedant-bucketv",
+  accessKeyId: process.env.AWS_ACCESS_KEy,
+  secretAccessKey: process.env.AWS_SECRETKEY,                            
+  Bucket: process.env.AWS_BUCKET_NAME,
 });
+
+
 
 module.exports = S3_Connection;
